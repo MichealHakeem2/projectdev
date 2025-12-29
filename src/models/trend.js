@@ -6,6 +6,7 @@ const trendSchema = new mongoose.Schema({
   velocity: Number,
   sentiment: Number,
   hypeRisk: Number,
+  postId: { type: mongoose.Schema.Types.ObjectId, ref: "Post" },
   status: { type: String, enum: ["rising","hot","falling"], default: "rising" },
   detectedAt: { type: Date, default: Date.now },
 });

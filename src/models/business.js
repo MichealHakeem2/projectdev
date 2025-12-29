@@ -31,11 +31,6 @@ const businessSchema = new mongoose.Schema({
     default: false
   },
 
-  followersCount: {
-    type: Number,
-    default: 0
-  },
-
   reputationScore: {
     type: Number,
     default: 0
