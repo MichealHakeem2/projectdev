@@ -8,8 +8,6 @@ const promotedTrendSchema = new mongoose.Schema({
   endAt: { type: Date, required: true },
   active: { type: Boolean, default: true },
   adBoost: { type: Number, default: 1 },
-  lastBoostedAt: { type: Date },
-  isAd: { type: Boolean, default: false },
   adPackage: { type: String, enum: ["starter", "boost", "viral"], default: "starter" },
 }, { timestamps: { createdAt: "createdAt" } });
 
