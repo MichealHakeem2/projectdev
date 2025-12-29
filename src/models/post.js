@@ -7,8 +7,8 @@ const postSchema = new mongoose.Schema({
   content: { type: String, required: true },
   mediaUrl: String,
   categoryId: { type: mongoose.Schema.Types.ObjectId, ref: "Category" },
-  hashtags: [String],
-
+  hashtagsId: { type: mongoose.Schema.Types.ObjectId, ref: "PostHashtag" },
+  tag: { type: String },
   // Engagement
   upvotes: { type: Number, default: 0 },
   downvotes: { type: Number, default: 0 },
