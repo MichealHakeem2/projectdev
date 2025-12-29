@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
   role: { type: String, enum: ["guest","user","creator","business","admin"], default: "guest" },
   avatarUrl: String,
   bio: String,
+  businessId: { type: mongoose.Schema.Types.ObjectId, ref: "Business" },
   interests: [String],
   followersCount: { type: Number, default: 0 },
   followingCount: { type: Number, default: 0 },

@@ -5,19 +5,14 @@ const businessSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-
   description: String,
-
   avatarUrl: String,
-
   coverUrl: String,
-
   type: {
     type: String,
     enum: ["individual", "company"],
     required: true
   },
-
   industry: {
     type: String,
     required: true
@@ -35,17 +30,6 @@ const businessSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
-
-  ownerId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true
-  },
-
-  managers: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User"
-  }],
 
   followersCount: {
     type: Number,
