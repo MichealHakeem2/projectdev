@@ -19,12 +19,6 @@ const postSchema = new mongoose.Schema({
   uniqueViews: { type: Number, default: 0 },
   externalClicks: { type: Number, default: 0 }, // link shares
 
-  // Ad & boost
-  adBoost: { type: Number, default: 1 },
-  lastBoostedAt: Date,
-  isAd: { type: Boolean, default: false },
-  adPackage: { type: String, enum: ["none", "starter", "boost", "viral"], default: "none" },
-
   // AI scores
   sentimentScore: { type: Number, default: 0 },
   authenticityScore: { type: Number, default: 1 },
