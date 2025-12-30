@@ -37,5 +37,5 @@ app.use((req, res, next) => {
 });
 app.use(errorMiddleware);
 app.listen(PORT, () => {
-    console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
+    console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port http://localhost:${PORT}`);
 });
