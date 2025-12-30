@@ -1,11 +1,6 @@
-const {getRedisClient} = require('../config/redis');
-const tokenBlacklistMiddleware = async (req, res, next) => {
-    const redisClient = getRedisClient();
+const cache = require('../config/cache');
 
-    if (!redisClient || !redisClient.isOpen) {
-        return next();
-    }
-
+const tokenBlacklistMiddleware = async (req, res, next) => { // async kept for interface, though cache is sync
     const authHeader = req.headers.authorization;
     if (!authHeader) return next();
 
@@ -13,7 +8,7 @@ const tokenBlacklistMiddleware = async (req, res, next) => {
     const key = `blacklist:${token}`;
 
     try {
-        const isBlacklisted = await redisClient.get(key);
+        const isBlacklisted = cache.get(key);
 
         if (isBlacklisted) {
             return res.status(401).json({

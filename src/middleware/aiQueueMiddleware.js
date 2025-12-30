@@ -1,14 +1,11 @@
 const crypto = require('crypto');
-const {getRedisClient} = require('../config/redis');
-const aiQueueMiddleware = async (req, res, next) => {
-    const redisClient = getRedisClient();
+const queue = require('../config/queue');
 
+const aiQueueMiddleware = async (req, res, next) => { // async kept for interface
     if ((req.method !== 'POST' && req.method !== 'PUT') || !req.body.content) {
         return next();
     }
-    if (!redisClient || !redisClient.isOpen) {
-        return next();
-    }
+
     try {
         const task = {
             taskId: crypto.randomUUID(),
@@ -24,7 +21,10 @@ const aiQueueMiddleware = async (req, res, next) => {
                 attempts: 0
             }
         };
-        await redisClient.lPush('trendverse:ai:queue', JSON.stringify(task));
+
+        queue.push(JSON.stringify(task));
+        console.log(`Task pushed to in-memory queue. Queue size: ${queue.size()}`);
+
         req.aiAnalysisPending = true;
     } catch (error) {
         console.error('AI Queue Error:', error);
