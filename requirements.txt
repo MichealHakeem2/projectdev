@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+transformers
+torch
+nltk
+scikit-learn
+pandas
+spacy
