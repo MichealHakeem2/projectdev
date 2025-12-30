@@ -1,10 +1,6 @@
-// src/controllers/userController.js
-
 const User = require('../models/user');
-const Post = require('../models/Post'); // For getUserFeed
+const Post = require('../models/Post'); 
 
-// @desc    Get user by ID (public profile)
-// @route   GET /api/users/:id
 exports.getUserById = async (req, res, next) => {
     try {
         const user = await User.findById(req.params.id)
@@ -24,9 +20,6 @@ exports.getUserById = async (req, res, next) => {
     }
 };
 
-// @desc    Update user profile
-// @route   PUT /api/users/:id
-// @access  Private (own profile only)
 exports.updateUserProfile = async (req, res, next) => {
     try {
         if (req.user._id.toString() !== req.params.id) {
@@ -34,7 +27,7 @@ exports.updateUserProfile = async (req, res, next) => {
         }
 
         const updates = req.body;
-        // Prevent updating role or password here
+       
         delete updates.role;
         delete updates.password;
 
@@ -52,9 +45,6 @@ exports.updateUserProfile = async (req, res, next) => {
     }
 };
 
-// @desc    Update password
-// @route   PUT /api/users/:id/password
-// @access  Private
 exports.updatePassword = async (req, res, next) => {
     try {
         if (req.user._id.toString() !== req.params.id) {
@@ -82,11 +72,8 @@ exports.updatePassword = async (req, res, next) => {
     }
 };
 
-// @desc    Assign badge to user (admin or system only)
-// @route   POST /api/users/:id/badges
 exports.assignBadgeToUser = async (req, res, next) => {
     try {
-        // In future: restrict to admin or badge system
         const { badgeId } = req.body;
 
         const user = await User.findById(req.params.id);
@@ -109,42 +96,34 @@ exports.assignBadgeToUser = async (req, res, next) => {
     }
 };
 
-// @desc    Get user's personalized feed
-// @route   GET /api/users/me/feed
-// @access  Private
+
 exports.getUserFeed = async (req, res, next) => {
     try {
         const user = req.user;
 
-        // Advanced feed logic as per document:
-        // Trending posts + posts in user's categories/interests + promoted trends
+        
         const page = parseInt(req.query.page) || 1;
         const limit = 20;
         const skip = (page - 1) * limit;
 
-        // 1. Trending posts (high engagement)
+      
         const trending = await Post.find()
             .sort({ upvotes: -1, createdAt: -1 })
             .limit(5);
 
-        // 2. Posts matching user's interests
+       
         const interestPosts = user.interests?.length
             ? await Post.find({ keywords: { $in: user.interests } })
                 .sort({ createdAt: -1 })
                 .limit(10)
             : [];
 
-        // 3. Posts from followed users (if you add follow system later)
-        // const followedPosts = await Post.find({ author: { $in: user.followedUsers } })
-        //   .sort({ createdAt: -1 })
-        //   .limit(10);
-
-        // Combine and deduplicate
+       
         const allPosts = [...trending, ...interestPosts];
         const uniquePostIds = [...new Set(allPosts.map(p => p._id.toString()))];
         const feedIds = uniquePostIds.map(id => require('mongoose').Types.ObjectId(id));
 
-        // Final feed with pagination
+        
         const feed = await Post.find({ _id: { $in: feedIds } })
             .populate('author', 'name')
             .sort({ createdAt: -1 })

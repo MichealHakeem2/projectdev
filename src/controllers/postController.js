@@ -12,14 +12,13 @@ exports.createPost = async (req, res, next) => {
       businessId
     } = req.body;
 
-    // Explicitly mapping fields to match schema
     const postData = {
       content,
       authorId: req.user._id,
       mediaUrl,
       categoryId,
       tag,
-      hashtagsId, // assuming this is passed as ID
+      hashtagsId, 
       businessId
     };
 
@@ -62,7 +61,6 @@ exports.getPostById = async (req, res, next) => {
       });
     }
 
-    // Register view
     post.uniqueViews += 1;
     post.impressions += 1;
     await post.save();
