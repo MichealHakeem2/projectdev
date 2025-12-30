@@ -11,6 +11,8 @@ const userSchema = new mongoose.Schema({
   interests: [String],
   reputationScore: { type: Number, default: 0 },
   isVerified: { type: Boolean, default: false },
+  aiTrustScore: { type: Number, default: 1 },
+  botProbability: { type: Number, default: 0 },
 }, { timestamps: { createdAt: "createdAt" } });
 
 module.exports = mongoose.model("User", userSchema);

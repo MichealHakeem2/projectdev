@@ -1,16 +1,7 @@
-const {createClient} = require('redis');
-let redisClient;
-(async () => {
-    if (process.env.REDIS_URL) {
-        try {
-            redisClient = createClient({
-                url: process.env.REDIS_URL
-            });
-            await redisClient.connect();
-        } catch (e) {}
-    }
-})();
+const {getRedisClient} = require('../config/redis');
 const tokenBlacklistMiddleware = async (req, res, next) => {
+    const redisClient = getRedisClient();
+
     if (!redisClient || !redisClient.isOpen) {
         return next();
     }

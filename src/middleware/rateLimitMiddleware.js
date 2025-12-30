@@ -1,20 +1,7 @@
-const {createClient} = require('redis');
-let redisClient;
-(async () => {
-    if (process.env.REDIS_URL) {
-        try {
-            redisClient = createClient({
-                url: process.env.REDIS_URL
-            });
-            redisClient.on('error', (err) => console.error('Rate Limit Redis Error', err));
-            await redisClient.connect();
-        } catch (err) {
-            console.error('Rate Limit Redis Connection Failed', err);
-        }
-    }
-})();
+const {getRedisClient} = require('../config/redis');
 const rateLimitMiddleware = (limit = 100, windowSeconds = 60) => {
     return async (req, res, next) => {
+        const redisClient = getRedisClient();
         const ip = req.ip;
         const key = `rate_limit:${ip}`;
 

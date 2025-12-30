@@ -1,23 +1,8 @@
-const {createClient} = require('redis');
 const crypto = require('crypto');
-let redisClient;
-(async () => {
-    if (!process.env.REDIS_URL) {
-        console.warn('REDIS_URL not set. AI Queue will run in fallback mode (skipping).');
-        return;
-    }
-    try {
-        redisClient = createClient({
-            url: process.env.REDIS_URL
-        });
-        redisClient.on('error', (err) => console.error('Redis Client Error', err));
-        await redisClient.connect();
-        console.log('AI Queue Middleware: Redis connected');
-    } catch (err) {
-        console.error('AI Queue Middleware: Failed to connect to Redis', err.message);
-    }
-})();
+const {getRedisClient} = require('../config/redis');
 const aiQueueMiddleware = async (req, res, next) => {
+    const redisClient = getRedisClient();
+
     if ((req.method !== 'POST' && req.method !== 'PUT') || !req.body.content) {
         return next();
     }
